@@ -1,0 +1,50 @@
+name: Deploy showcase to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Structural sanity check (showcase)
+        run: |
+          node -e '
+          const s=require("fs").readFileSync("showcase/index.html","utf8");
+          let fail=0;
+          const miss=l=>{console.error("FAIL: missing "+l);fail++;};
+          for (const id of ["main","scroll-progress"]) if(!s.includes("id=\""+id+"\"")) miss("id=\""+id+"\"");
+          for (const c of ["hero","marquee","bento","demos","stats","gallery","manifesto","footer"]) if(!(s.includes("class=\""+c)||s.includes(c))) miss("section class "+c);
+          for (const h of ["data-reveal","data-stagger","data-count","data-magnetic","data-tilt","data-terminal","data-accordion"]) if(!s.includes(h)) miss("hook "+h);
+          if(!s.includes("display=swap")) miss("font display=swap");
+          if(fail){console.error(fail+" structural assertion(s) failed");process.exit(1);}
+          console.log("skeleton OK / hooks OK ; font swap OK");
+          '
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: showcase/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

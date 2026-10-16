@@ -2,6 +2,8 @@
 
 A showcase gallery of premium web pages handcrafted by an AI agent (GLM 5.3 Flash via OpenCode) — built to demonstrate senior-level frontend design, animation, and engineering practices.
 
+**Demo (GitHub Pages):** https://andresbetov.github.io/web-pages-created-with-glm5.3-flash/
+
 ## What's inside
 
 `showcase/` — the first flagship page: a cinematic, animated single-page site (vanilla HTML/CSS/JS, zero dependencies, GitHub Pages ready).
