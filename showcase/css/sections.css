@@ -1,0 +1,890 @@
+/* ---------------------------------------------------------------------------
+   sections.css — Task 2 · per-section visuals
+   Hero kinetic type, marquee band chrome, bento art, demo panels + accordion,
+   stats numerals, gallery CSS-art cards, manifesto band, responsive collapse
+   and the capped backdrop-filter budget.
+--------------------------------------------------------------------------- */
+
+/* ---- Shared gradient-text utility (hero middle line + manifesto) ---- */
+.grad-text {
+  background: linear-gradient(92deg, var(--accent), var(--accent-2) 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Hero: cinematic 100svh column ---- */
+.hero {
+  position: relative;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0;
+  min-height: 100svh;
+  text-align: center;
+  padding-top: clamp(7rem, 14vh, 9rem);
+  padding-bottom: clamp(7rem, 16vh, 10rem);
+}
+
+.hero .kicker {
+  margin-bottom: clamp(2.25rem, 5vw, 3rem);
+}
+
+.hero h1 {
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.hero-line {
+  display: block;
+  font-size: clamp(3rem, 12vw, 7.5rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.hero-line--long {
+  font-size: clamp(2.2rem, 9.2vw, 7.5rem);
+}
+
+.hero-lede {
+  max-width: 36rem;
+  margin-top: clamp(2rem, 4vw, 2.75rem);
+  color: var(--ink-dim);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: clamp(2.25rem, 5vw, 3rem);
+}
+
+/* Scroll cue — mono label + chevron drawn with CSS borders only.
+   The bounce is motion.css territory; static here. */
+.scroll-cue {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 50%;
+  translate: -50% 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.75rem 1.25rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.scroll-cue:hover,
+.scroll-cue:focus-visible {
+  color: var(--ink);
+}
+
+.scroll-cue-chevron {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 1.5px solid var(--accent-2);
+  border-bottom: 1.5px solid var(--accent-2);
+  transform: rotate(45deg);
+}
+
+/* ---- Marquee: full-bleed capability band ---- */
+.marquee {
+  display: flex;
+  overflow: hidden;
+  gap: 2.5rem; /* inter-track seam matches the intra-track item gap so the
+    Task 3 loop crosses a uniform 2.5rem rhythm; gap lives on the clipper,
+    tracks stay shrink-0 and self-contained. */
+  padding-block: clamp(1.5rem, 3vw, 2.25rem);
+  border-block: 1px solid var(--line);
+  /* D7 fix: soften the hard clip at wide viewports — items fade instead of
+     being guillotined at the edges (unmasked engines keep the clean cut). */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.marquee-track span {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  white-space: nowrap;
+  color: var(--accent-2);
+}
+
+/* Section 01 — capabilities ------------------------------------------------ */
+
+.bento .kicker,
+.demos .kicker,
+.stats .kicker,
+.gallery .kicker {
+  margin-bottom: 1.25rem;
+}
+
+.bento h2,
+.demos h2,
+.gallery h2 {
+  margin-bottom: clamp(2.75rem, 6vw, 4rem);
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: dense;
+  grid-auto-rows: 1fr;
+  gap: clamp(1rem, 1.5vw, 1.5rem);
+}
+
+/* Exact spans: A 2col · B 1col×2row · C D E 1×1 · F 2col → fills 3×3, no holes */
+.card--type {
+  grid-column: span 2;
+}
+
+.card--motion {
+  grid-row: span 2;
+}
+
+.card--zero {
+  grid-column: span 2;
+}
+
+/* Bento card internals: tag / title / copy + pure-CSS art behind glass. */
+.card-tag {
+  display: block;
+  margin-bottom: 1rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.3em;
+  color: var(--ink-dim);
+}
+
+.card h3 {
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.card p {
+  margin-top: 0.625rem;
+  max-width: 28rem;
+  font-size: 0.9375rem;
+  color: var(--ink-dim);
+}
+
+.card--micro p {
+  max-width: 14rem;
+}
+
+.card-art {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* A — Typography Engine: giant “Aa” watermark glyph */
+.card-art--type {
+  right: -0.75rem;
+  bottom: -1.75rem;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: clamp(5rem, 10vw, 8.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--accent) 52%, transparent),
+    color-mix(in oklab, var(--accent-2) 18%, transparent) 75%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* B — Motion Systems: three pills sharing one left edge — staggered widths
+   (8.5 → 7 → 5.5rem) read as motion phases; the middle phase is filled. */
+.card-art--motion {
+  left: 1.75rem;
+  right: 1.75rem;
+  bottom: 1.75rem;
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+}
+
+.card-art--motion i {
+  display: block;
+  width: 8.5rem;
+  height: 2rem;
+  border: 1px solid color-mix(in oklab, var(--ink) 34%, transparent);
+  border-radius: 999px;
+}
+
+.card-art--motion i:nth-child(2) {
+  width: 7rem;
+  border-color: color-mix(in oklab, var(--accent) 58%, transparent);
+  background: color-mix(in oklab, var(--accent) 58%, transparent);
+}
+
+.card-art--motion i:nth-child(3) {
+  width: 5.5rem;
+  border-color: color-mix(in oklab, var(--ink) 20%, transparent);
+}
+
+/* C — Aurora Rendering: mini aurora wash */
+.card-art--aurora {
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+      120% 85% at 12% -5%,
+      color-mix(in oklab, var(--accent) 62%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      90% 75% at 100% 30%,
+      color-mix(in oklab, var(--accent-2) 48%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      110% 90% at 50% 120%,
+      color-mix(in oklab, var(--gold) 22%, transparent),
+      transparent 65%
+    );
+  filter: saturate(1.15);
+}
+
+/* D — Micro-interactions: circular mouse-dot target */
+.card-art--micro {
+  right: 1.25rem;
+  bottom: 1.25rem;
+  width: 6.5rem;
+  height: 6.5rem;
+  border: 1px solid color-mix(in oklab, var(--ink) 28%, transparent);
+  border-radius: 50%;
+}
+
+.card-art--micro::before {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border: 1px solid color-mix(in oklab, var(--ink) 18%, transparent);
+  border-radius: 50%;
+}
+
+.card-art--micro::after {
+  content: "";
+  position: absolute;
+  inset: 42%;
+  border-radius: 50%;
+  background: linear-gradient(140deg, var(--accent), var(--accent-2));
+}
+
+/* E — Adaptive Layouts: three nested-width bars */
+.card-art--adaptive {
+  left: 1.75rem;
+  right: 1.75rem;
+  bottom: 1.75rem;
+  display: grid;
+  gap: 0.625rem;
+}
+
+.card-art--adaptive i {
+  display: block;
+  height: 0.5rem;
+  border-radius: 999px;
+}
+
+.card-art--adaptive i:nth-child(1) {
+  width: 100%;
+  background: color-mix(in oklab, var(--accent) 62%, transparent);
+}
+
+.card-art--adaptive i:nth-child(2) {
+  width: 68%;
+  background: color-mix(in oklab, var(--accent-2) 48%, transparent);
+}
+
+.card-art--adaptive i:nth-child(3) {
+  width: 42%;
+  background: color-mix(in oklab, var(--ink) 16%, transparent);
+}
+
+/* F — Dependency Zero: giant “0”, Space Grotesk 700 with the card-A gradient
+   treatment. JetBrains Mono's slotted zero read as a hollow capsule and text-
+   stroke edges caught card clipping — background-clip:text glyphs can't clip,
+   and the grotesk zero's closed counter reads unmistakably as zero. */
+.card-art--zero {
+  right: 1.5rem;
+  top: 50%;
+  translate: 0 -50%;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: clamp(4rem, 9vw, 8rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--accent) 52%, transparent),
+    color-mix(in oklab, var(--accent-2) 18%, transparent) 75%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Section 02 — interactive demos ------------------------------------------- */
+
+.demos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 2rem);
+  align-items: stretch;
+}
+
+/* Shared glass shell for the three demo panels; terminal overrides dark. */
+.demos-grid > * {
+  padding: 1.5rem;
+  background: color-mix(in oklab, var(--surface) 55%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+}
+
+/* Terminal: dark inset console, traffic dots, cyan mono text. */
+.terminal {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.5rem 1.5rem;
+  background: #05050a;
+}
+
+.terminal-bar {
+  display: flex;
+  gap: 0.5rem;
+  padding-block: 0.375rem 1rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+}
+
+/* Traffic dots — CSS circles. */
+.terminal-bar span {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+}
+
+.terminal-bar span:nth-child(1) {
+  background: #ff5f57;
+}
+
+.terminal-bar span:nth-child(2) {
+  background: #febc2e;
+}
+
+.terminal-bar span:nth-child(3) {
+  background: #28c840;
+}
+
+.terminal pre {
+  flex: 1;
+  min-height: 9.5em;
+  margin-block: 1rem 0.25rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: #22d3ee;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-terminal-idle] {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.8125rem;
+  color: color-mix(in oklab, #22d3ee 78%, transparent);
+}
+
+/* Morph: a live demo of the token crossfade, pure CSS — two stacked trios
+   share one grid cell. The front layer is the shipped palette
+   (accent / accent-2 / gold); the back layer re-mixes the same three tokens
+   into a different triage (each swatch blends its neighbor's hue in). No new
+   colors anywhere. motion.css owns the ambient crossfade and the parity pair
+   neutralizes it — reduced motion keeps the static front trio. */
+.morph-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.morph {
+  display: grid; /* layers stack in one shared cell */
+}
+
+.morph-layer {
+  grid-area: 1 / 1;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.morph-layer span {
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
+  border-radius: 1rem;
+}
+
+.morph-layer.is-front span:nth-child(1) {
+  background: linear-gradient(
+    150deg,
+    var(--accent),
+    color-mix(in oklab, var(--accent) 55%, var(--bg))
+  );
+}
+
+.morph-layer.is-front span:nth-child(2) {
+  background: linear-gradient(
+    150deg,
+    var(--accent-2),
+    color-mix(in oklab, var(--accent-2) 55%, var(--bg))
+  );
+}
+
+.morph-layer.is-front span:nth-child(3) {
+  background: linear-gradient(
+    150deg,
+    var(--gold),
+    color-mix(in oklab, var(--gold) 55%, var(--bg))
+  );
+}
+
+/* Back trio: the same tokens re-mixed — accent-2 leaning accent, gold
+   leaning accent-2, accent leaning gold. Token-derived, never new hues. */
+.morph-layer.is-back span:nth-child(1) {
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--accent-2) 70%, var(--accent)),
+    color-mix(in oklab, var(--accent-2) 48%, var(--bg))
+  );
+}
+
+.morph-layer.is-back span:nth-child(2) {
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--gold) 70%, var(--accent-2)),
+    color-mix(in oklab, var(--gold) 48%, var(--bg))
+  );
+}
+
+.morph-layer.is-back span:nth-child(3) {
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--accent) 70%, var(--gold)),
+    color-mix(in oklab, var(--accent) 48%, var(--bg))
+  );
+}
+
+/* At-rest park: with the crossfade stripped (either motion parity state) the
+   back layer must not paint — it stacks after the front in the shared cell
+   and would cover the shipped trio. motion.css's animation overrides this
+   declaration while it runs (animations outrank author declarations), so the
+   fade itself is untouched. */
+.morph-layer.is-back {
+  opacity: 0;
+}
+
+.morph-label {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+}
+
+/* Accordion process timeline — OWNED HERE (Task 4 toggles classes only).
+   rows 0fr↔1fr choreography with a reduced-motion neutralizer. */
+.manifesto-accordion {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+[data-accordion-trigger] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 24px;
+  padding: 1.125rem 0.25rem;
+  text-align: left;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  border-top: 1px solid var(--line);
+  transition: color 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.manifesto-accordion [data-accordion-trigger]:last-of-type {
+  border-bottom: 1px solid var(--line);
+}
+
+[data-accordion-trigger]::after {
+  content: "";
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-accordion-trigger]:hover,
+[data-accordion-trigger]:focus-visible {
+  color: var(--accent-2);
+}
+
+/* Open state — Task 4 sets aria-expanded + .is-open on the panel. */
+[data-accordion-trigger][aria-expanded="true"],
+[data-accordion-trigger]:has(+ .panel-grid.is-open) {
+  color: var(--accent-2);
+}
+
+[data-accordion-trigger][aria-expanded="true"]::after,
+[data-accordion-trigger]:has(+ .panel-grid.is-open)::after {
+  transform: rotate(-135deg);
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.panel-grid.is-open {
+  grid-template-rows: 1fr;
+}
+
+.panel {
+  overflow: hidden;
+}
+
+.panel p {
+  max-width: 34rem;
+  padding-block: 0.25rem 1.25rem;
+  font-size: 0.9375rem;
+  color: var(--ink-dim);
+}
+
+/* Reduced-motion neutralizer: rows jump, no transition. */
+@media (prefers-reduced-motion: reduce) {
+  .panel-grid {
+    transition: none;
+  }
+}
+
+html.motion-off .panel-grid {
+  transition: none;
+}
+
+/* Section 03 — stats numerals ----------------------------------------------- */
+
+.stat {
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+}
+
+.stat-value {
+  display: block;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(
+    180deg,
+    var(--gold),
+    color-mix(in oklab, var(--gold) 55%, var(--bg))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.stat-label {
+  display: block;
+  margin-top: 0.875rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+/* Section 04 — gallery: layered CSS-art cards -------------------------------- */
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.gallery-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  transition: border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-card:hover,
+.gallery-card:focus-within {
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
+}
+
+.gallery-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-card:hover .gallery-art,
+.gallery-card:focus-within .gallery-art {
+  transform: scale(1.035);
+}
+
+/* NEBULA — violet/cyan bloom with a sparse starfield. */
+.gallery-card--nebula .gallery-art {
+  background: radial-gradient(circle at 22% 18%, #f4f4f8 0 1px, transparent 1.5px),
+    radial-gradient(circle at 68% 9%, #f4f4f8 0 1px, transparent 1.5px),
+    radial-gradient(circle at 84% 34%, #f4f4f8 0 1.5px, transparent 2px),
+    radial-gradient(circle at 40% 42%, rgba(244, 244, 248, 0.7) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 12% 60%, rgba(244, 244, 248, 0.6) 0 1px, transparent 1.5px),
+    radial-gradient(110% 90% at 30% 22%, color-mix(in oklab, var(--accent) 62%, transparent), transparent 62%),
+    radial-gradient(95% 85% at 78% 58%, color-mix(in oklab, var(--accent-2) 52%, transparent), transparent 64%),
+    conic-gradient(
+      from 220deg at 55% 40%,
+      color-mix(in oklab, var(--accent) 26%, var(--bg)),
+      color-mix(in oklab, var(--accent-2) 16%, var(--bg)) 40%,
+      var(--bg) 78%
+    );
+}
+
+/* CASCADE — vertical repeating-gradient falls over a cyan pool. */
+.gallery-card--cascade .gallery-art {
+  background: radial-gradient(
+      90% 26% at 50% 100%,
+      color-mix(in oklab, var(--accent-2) 44%, transparent),
+      transparent 70%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 27px,
+      color-mix(in oklab, var(--accent-2) 24%, transparent) 27px 30px,
+      transparent 30px 74px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 10px,
+      color-mix(in oklab, var(--accent-2) 9%, transparent) 10px 11.5px,
+      transparent 11.5px 13px
+    ),
+    conic-gradient(
+      from 200deg at 50% 10%,
+      color-mix(in oklab, var(--accent) 18%, var(--bg)),
+      var(--bg) 45%,
+      color-mix(in oklab, var(--accent-2) 24%, var(--bg)) 100%
+    );
+}
+
+/* MONOLITH — concentric dark geometry, vignetted. */
+.gallery-card--monolith .gallery-art {
+  background: radial-gradient(
+    120% 90% at 50% 8%,
+    color-mix(in oklab, var(--ink) 6%, transparent),
+    transparent 60%
+  );
+}
+
+.gallery-card--monolith .gallery-art::before,
+.gallery-card--monolith .gallery-art::after {
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border: 1px solid color-mix(in oklab, var(--ink) 34%, transparent);
+  border-radius: 0.75rem;
+}
+
+/* Inner box + a gap + a boxed hairline ring, stacked via spread shadows. */
+.gallery-card--monolith .gallery-art::after {
+  inset: 26% 22%;
+  border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--accent) 30%, transparent),
+    color-mix(in oklab, var(--accent) 3%, transparent) 45%,
+    transparent 82%,
+    color-mix(in oklab, var(--gold) 14%, transparent)
+  );
+  box-shadow: 0 0 0 26px color-mix(in oklab, #0a0a12 85%, transparent),
+    0 0 0 27.5px color-mix(in oklab, var(--ink) 22%, transparent);
+}
+
+/* Title chips: mono, pill-visible glass, no backdrop (paint budget). */
+.gallery-chip {
+  position: absolute;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 1;
+  padding: 0.5rem 1rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--ink);
+  background: color-mix(in oklab, var(--bg) 55%, transparent);
+  border: 1px solid color-mix(in oklab, var(--ink) 20%, transparent);
+  border-radius: 999px;
+}
+
+/* Section 05 — manifesto band ------------------------------------------------ */
+
+.manifesto {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  padding-inline: clamp(1.25rem, 3vw, 3rem);
+  padding-block: clamp(7rem, 14vw, 7.5rem); /* D5: upper bound tightened 11 → 7.5rem */
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in oklab, var(--accent) 9%, transparent)
+  );
+  border-top: 1px solid var(--line);
+}
+
+/* D5 fix: the band closes the 0–05 kicker scale. order:-1 lifts the real
+   kicker above the ::before rule (grids place pseudo-items DOM-first). */
+.manifesto-kicker {
+  order: -1;
+  margin-bottom: 1.75rem;
+}
+
+.manifesto::before {
+  content: "";
+  display: block;
+  width: min(20rem, 60%);
+  height: 1px;
+  order: 0;
+  margin-bottom: clamp(2rem, 4.5vw, 3rem);
+  background: linear-gradient(90deg, transparent, var(--accent) 30%, var(--accent-2) 70%, transparent);
+}
+
+.manifesto-statement {
+  max-width: 26ch;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-size: clamp(2.4rem, 6.5vw, 5.25rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.manifesto .btn {
+  margin-top: clamp(2.75rem, 6vw, 4rem);
+  min-width: 12rem;
+}
+
+/* ---- Responsive collapse --------------------------------------------------- */
+
+@media (max-width: 900px) {
+  /* Bento falls to one column; span rules reset so nothing bleeds. */
+  .bento-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+
+  .card--type,
+  .card--motion,
+  .card--zero {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .card {
+    min-height: 15rem;
+  }
+
+  .card--motion {
+    min-height: 15.5rem;
+  }
+
+  .demos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+  }
+}
+
+/* ---- Step 6 guards: paint budget --------------------------------------------
+   backdrop-filter is capped to header + bento/gallery glass at ≥900px.
+   Below that every glass surface falls back to solid --surface. */
+
+@media (min-width: 900px) {
+  .site-header {
+    backdrop-filter: blur(12px) saturate(1.4);
+  }
+
+  .card,
+  .gallery-card {
+    backdrop-filter: blur(10px);
+  }
+}
+
+@media (max-width: 899.98px) {
+  .site-header,
+  .card,
+  .gallery-card {
+    background: var(--surface);
+  }
+}
+
+

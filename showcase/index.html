@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="A cinematic, zero-dependency single-page showcase — authored end-to-end by GLM 5.3 Flash in one session with OpenCode.">
+  <meta name="theme-color" content="#0a0a12">
+  <title>GLM Flash — AI-crafted web experiences</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@500;700&display=swap">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/layout.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/sections.css">
+  <link rel="stylesheet" href="./css/motion.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div class="aurora aurora--violet" aria-hidden="true"></div>
+  <div class="aurora aurora--cyan" aria-hidden="true"></div>
+  <div class="aurora aurora--gold" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="logo" href="#hero">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="logo-bolt" x1="4" y1="22" x2="20" y2="2" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#7c5cff"/>
+            <stop offset="1" stop-color="#22d3ee"/>
+          </linearGradient>
+        </defs>
+        <path d="M13 2 4 14h7l-2 8 9-12h-7l2-8Z" fill="url(#logo-bolt)"/>
+      </svg>
+      <span>GLM Flash</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#bento">Capabilities</a>
+      <a href="#demos">Demo</a>
+      <a href="#gallery">Gallery</a>
+    </nav>
+    <button id="motion-toggle" type="button" aria-pressed="false">Reduce motion</button>
+    <div id="scroll-progress" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+    <section class="hero container" id="hero">
+      <p class="kicker">GLM 5.3 FLASH × OPENCODE</p>
+      <h1 data-stagger data-reveal>
+        <span class="hero-line">DESIGN</span>
+        <span class="hero-line grad-text">ENGINEERED</span>
+        <span class="hero-line hero-line--long">BY INTELLIGENCE.</span>
+      </h1>
+      <p class="hero-lede">A showcase of what GLM 5.3 Flash builds in a single session — cinematic motion, editorial type, zero dependencies. Every pixel on this page was written by a machine with taste.</p>
+      <div class="hero-cta">
+        <a class="btn btn-solid" href="#gallery" data-magnetic>See the work</a>
+        <a class="btn btn-ghost" href="#demos" data-magnetic>How it's built</a>
+      </div>
+      <a class="scroll-cue" href="#bento" aria-label="Scroll to capabilities"><span class="scroll-cue-chevron" aria-hidden="true"></span>SCROLL</a>
+    </section>
+
+    <section class="marquee" aria-label="Capabilities">
+      <div class="marquee-track">
+        <span>KINETIC TYPE</span>
+        <span>AURORA MESH</span>
+        <span>SCROLL CHOREOGRAPHY</span>
+        <span>MAGNETIC UI</span>
+        <span>BENTO GRIDS</span>
+        <span>GLASS MORPHISM</span>
+        <span>GRAIN OVERLAYS</span>
+        <span>ZERO DEPENDENCIES</span>
+        <!-- Duplicated second half: aria-hidden hides it from AT (one set heard);
+             display:contents keeps all 16 spans as flex items so the loop seam
+             and the 2.5rem rhythm stay untouched. -->
+        <span aria-hidden="true" style="display:contents">
+          <span aria-hidden="true">KINETIC TYPE</span>
+          <span aria-hidden="true">AURORA MESH</span>
+          <span aria-hidden="true">SCROLL CHOREOGRAPHY</span>
+          <span aria-hidden="true">MAGNETIC UI</span>
+          <span aria-hidden="true">BENTO GRIDS</span>
+          <span aria-hidden="true">GLASS MORPHISM</span>
+          <span aria-hidden="true">GRAIN OVERLAYS</span>
+          <span aria-hidden="true">ZERO DEPENDENCIES</span>
+        </span>
+      </div>
+      <div class="marquee-track" aria-hidden="true">
+        <span>KINETIC TYPE</span>
+        <span>AURORA MESH</span>
+        <span>SCROLL CHOREOGRAPHY</span>
+        <span>MAGNETIC UI</span>
+        <span>BENTO GRIDS</span>
+        <span>GLASS MORPHISM</span>
+        <span>GRAIN OVERLAYS</span>
+        <span>ZERO DEPENDENCIES</span>
+        <span>KINETIC TYPE</span>
+        <span>AURORA MESH</span>
+        <span>SCROLL CHOREOGRAPHY</span>
+        <span>MAGNETIC UI</span>
+        <span>BENTO GRIDS</span>
+        <span>GLASS MORPHISM</span>
+        <span>GRAIN OVERLAYS</span>
+        <span>ZERO DEPENDENCIES</span>
+      </div>
+    </section>
+
+    <section class="bento container" id="bento">
+      <p class="kicker">01 / CAPABILITIES</p>
+      <h2 data-reveal>Built like a studio, in one pass.</h2>
+      <div class="bento-grid">
+        <article class="card card--type" data-tilt data-reveal>
+          <span class="card-art card-art--type" aria-hidden="true">Aa</span>
+          <span class="card-tag">A</span>
+          <h3>Typography Engine</h3>
+          <p>Uppercase Space Grotesk lines, tracked tight, revealed line by line.</p>
+        </article>
+        <article class="card card--motion" data-tilt data-reveal>
+          <span class="card-art card-art--motion" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="card-tag">B</span>
+          <h3>Motion Systems</h3>
+          <p>Transform-and-opacity choreography that never competes with itself.</p>
+        </article>
+        <article class="card card--aurora" data-tilt data-reveal>
+          <span class="card-art card-art--aurora" aria-hidden="true"></span>
+          <span class="card-tag">C</span>
+          <h3>Aurora Rendering</h3>
+          <p>Three blurred color fields blended straight into the canvas.</p>
+        </article>
+        <article class="card card--micro" data-tilt data-reveal>
+          <span class="card-art card-art--micro" aria-hidden="true"></span>
+          <span class="card-tag">D</span>
+          <h3>Micro-interactions</h3>
+          <p>Magnetic buttons, tilting cards, hover answers everywhere.</p>
+        </article>
+        <article class="card card--adaptive" data-tilt data-reveal>
+          <span class="card-art card-art--adaptive" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="card-tag">E</span>
+          <h3>Adaptive Layouts</h3>
+          <p>Fluid clamps and bento spans that reflow cleanly from 360px to 4K.</p>
+        </article>
+        <article class="card card--zero" data-tilt data-reveal>
+          <span class="card-art card-art--zero" aria-hidden="true">0</span>
+          <span class="card-tag">F</span>
+          <h3>Dependency Zero</h3>
+          <p>No frameworks, no bundler: just HTML, CSS and a few small ES modules.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="demos container" id="demos">
+      <p class="kicker">02 / INTERACTIVE</p>
+      <h2 data-reveal>Proof, not promises.</h2>
+      <div class="demos-grid">
+        <div class="terminal">
+          <div class="terminal-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+          <pre data-terminal-output></pre>
+          <p data-terminal-idle>▍ idle</p>
+          <p class="sr-only" role="status" data-terminal-summary></p>
+        </div>
+        <div class="morph-panel">
+          <!-- Live token crossfade, pure CSS: two stacked trios share one grid
+               cell; the back layer re-mixes the same three tokens and fades
+               over the front on an ambient loop (motion.css; both parity
+               blocks neutralize it — reduced motion keeps the front trio). -->
+          <div class="morph" aria-hidden="true">
+            <div class="morph-layer is-front">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="morph-layer is-back">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <p class="morph-label">One token file recolors every element.</p>
+        </div>
+        <div class="manifesto-accordion" data-accordion>
+          <button data-accordion-trigger id="step-trigger-1" aria-expanded="false" aria-controls="step-panel-1">Research</button>
+          <div class="panel-grid">
+            <div class="panel" id="step-panel-1" role="region" aria-labelledby="step-trigger-1" inert>
+              <p>The brief is read once, fully. Everything the page must prove gets written down before the first tag.</p>
+            </div>
+          </div>
+          <button data-accordion-trigger id="step-trigger-2" aria-expanded="false" aria-controls="step-panel-2">Design</button>
+          <div class="panel-grid">
+            <div class="panel" id="step-panel-2" role="region" aria-labelledby="step-trigger-2" inert>
+              <p>Tokens first: type scale, palette and motion language locked as variables the whole page runs on.</p>
+            </div>
+          </div>
+          <button data-accordion-trigger id="step-trigger-3" aria-expanded="false" aria-controls="step-panel-3">Implement</button>
+          <div class="panel-grid">
+            <div class="panel" id="step-panel-3" role="region" aria-labelledby="step-trigger-3" inert>
+              <p>Markup, then styles, then motion — each layer verified with headless Chromium screenshots as it lands.</p>
+            </div>
+          </div>
+          <button data-accordion-trigger id="step-trigger-4" aria-expanded="false" aria-controls="step-panel-4">Verify</button>
+          <div class="panel-grid">
+            <div class="panel" id="step-panel-4" role="region" aria-labelledby="step-trigger-4" inert>
+              <p>Keyboard walks, reduced-motion runs and 360px overflow checks. Nothing ships until the QA wave is clean.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats container" id="stats" aria-label="Runtime numbers">
+      <p class="kicker">03 / RUNTIME NUMBERS</p>
+      <ul class="stats-list">
+        <!-- A3 fix: the counting value and its visible label are both hidden
+             from AT; one sr-only sibling carries the FINAL complete statement
+             so exactly one full stat is announced (no count-up churn). -->
+        <li class="stat">
+          <span class="stat-value" data-count="0" aria-hidden="true">0</span>
+          <span class="stat-label" aria-hidden="true">npm dependencies</span>
+          <span class="sr-only">0 npm dependencies</span>
+        </li>
+        <li class="stat">
+          <span class="stat-value" data-count="60" aria-hidden="true">60</span>
+          <span class="stat-label" aria-hidden="true">fps animations</span>
+          <span class="sr-only">60 fps animations</span>
+        </li>
+        <li class="stat">
+          <span class="stat-value" data-count="100" aria-hidden="true">100</span>
+          <span class="stat-label" aria-hidden="true">lighthouse target</span>
+          <span class="sr-only">100 lighthouse target</span>
+        </li>
+        <li class="stat">
+          <span class="stat-value" data-count="1" aria-hidden="true">1</span>
+          <span class="stat-label" aria-hidden="true">session</span>
+          <span class="sr-only">1 session</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="gallery container" id="gallery">
+      <p class="kicker">04 / SELECTED FRAMES</p>
+      <h2 data-reveal>Machines can shoot film now.</h2>
+      <div class="gallery-grid">
+        <article class="gallery-card gallery-card--nebula">
+          <div class="gallery-art" aria-hidden="true"></div>
+          <h3 class="gallery-chip">NEBULA</h3>
+        </article>
+        <article class="gallery-card gallery-card--cascade">
+          <div class="gallery-art" aria-hidden="true"></div>
+          <h3 class="gallery-chip">CASCADE</h3>
+        </article>
+        <article class="gallery-card gallery-card--monolith">
+          <div class="gallery-art" aria-hidden="true"></div>
+          <h3 class="gallery-chip">MONOLITH</h3>
+        </article>
+      </div>
+    </section>
+
+    <section class="manifesto" id="manifesto" aria-label="Manifesto">
+      <p class="kicker manifesto-kicker">05 / THE SENTENCE</p>
+      <p class="font-display grad-text manifesto-statement" data-reveal>The prompt was one sentence. The rest is taste.</p>
+      <a class="btn btn-ghost" href="#demos" data-magnetic>How it's built</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h3>Explore</h3>
+        <ul>
+          <li><a href="#gallery">See the work</a></li>
+          <li><a href="#bento">Capabilities</a></li>
+          <li><a href="#demos">Demo</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Stack</h3>
+        <ul>
+          <li>HTML5</li>
+          <li>Modern CSS</li>
+          <li>ES modules</li>
+          <li>Zero dependencies</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Meta</h3>
+        <ul>
+          <li>One session</li>
+          <li>No build step</li>
+          <li>WCAG AA</li>
+        </ul>
+      </div>
+    </div>
+    <p class="container footer-meta">Built by GLM 5.3 Flash · OpenCode orchestration · Space Grotesk × Inter × JetBrains Mono</p>
+  </footer>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

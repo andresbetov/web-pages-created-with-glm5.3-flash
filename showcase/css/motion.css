@@ -1,0 +1,424 @@
+/* ---------------------------------------------------------------------------
+   motion.css — Task 3 · the motion system
+   Reveal cascade ([data-reveal]/[data-stagger] pre-states + .is-revealed
+   toggles), ambient layer (aurora drift, marquee travel, scroll-cue bounce,
+   CTA glint, the morph token crossfade, the terminal caret blink), the
+   scroll-driven bonus (gallery scrub, progress rail) and the
+   reduced-motion / html.motion-off parity pair that neutralizes all of it.
+   The ambients are JS-free: Task 4 only toggles .js / .is-revealed /
+   .motion-off, and the caret additionally rides terminal.js's .is-typing.
+   Animated channels: transform + opacity + the individual translate/rotate
+   properties (so JS tilt and Task 2's transform hover lifts never collide).
+   Easing rides the page-wide cubic-bezier(0.22, 1, 0.36, 1). No new colors.
+--------------------------------------------------------------------------- */
+
+/* ---- Reveal cascade -------------------------------------------------------
+   Pre-states exist ONLY under .js (Task 4 adds it; no-JS browsers see the
+   whole page immediately). [data-stagger] children own their own
+   opacity/translate/rotate so the hero cascades per line (--i from Task 4's
+   stagger pass gives 0/90/180ms). The stagger container also carries
+   data-reveal but stays inert: fading it while three children cascade would
+   double-expose the headline — it is the observer's trigger only. */
+
+.js [data-reveal] {
+  opacity: 0;
+  translate: 0 24px;
+}
+
+.js [data-stagger] > * {
+  opacity: 0;
+  translate: 0 24px;
+  rotate: 0.5deg;
+  transition: opacity 0.7s ease-out,
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    rotate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--i) * 90ms);
+}
+
+/* The inert trigger (matches the data-stagger h1 alone). */
+.js [data-stagger][data-reveal] {
+  opacity: 1;
+  translate: 0 0;
+  transition: none;
+}
+
+/* Task 4's IntersectionObserver (threshold .15, rootMargin -10% bottom)
+   adds .is-revealed to an observed target; the transition lives on the
+   arriving state so the change animates out of the pre-state above. */
+.js .is-revealed {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.7s ease-out,
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Cascade look-up: hero lines reveal with their per-line delay. */
+.js [data-stagger].is-revealed > * {
+  opacity: 1;
+  translate: 0 0;
+  rotate: 0deg;
+}
+
+/* Preserve Task 2's bento hover seam: the reveal transition would otherwise
+   replace the card's border-color fade the moment .is-revealed lands. */
+.js .card.is-revealed {
+  transition: opacity 0.7s ease-out,
+    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---- Ambient: aurora drift ------------------------------------------------
+   Translate-only — NEVER scale: scaling a blurred layer re-rasters the blur
+   every frame, while translate keeps the 60px filter cached. blur(60px)
+   stays on base.css untouched. Three quiet, distinct paths at 60s alternate
+   so the field breathes instead of sliding in lockstep. */
+.aurora--violet {
+  animation: aurora-drift-violet 60s ease-in-out alternate infinite;
+}
+
+.aurora--cyan {
+  animation: aurora-drift-cyan 60s ease-in-out alternate infinite;
+}
+
+.aurora--gold {
+  animation: aurora-drift-gold 60s ease-in-out alternate infinite;
+}
+
+@keyframes aurora-drift-violet {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(4rem, 0.5rem, 0);
+  }
+
+  to {
+    transform: translate3d(2rem, 3.5rem, 0);
+  }
+}
+
+@keyframes aurora-drift-cyan {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(-3.5rem, -1.5rem, 0);
+  }
+
+  to {
+    transform: translate3d(-1.5rem, 2rem, 0);
+  }
+}
+
+@keyframes aurora-drift-gold {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(3rem, -2.5rem, 0);
+  }
+
+  to {
+    transform: translate3d(-2.5rem, -1rem, 0);
+  }
+}
+
+/* ---- Ambient: marquee travel ----------------------------------------------
+   Ledger handoff (Task 2 fix fb262bd): per-track travel is the full track
+   width PLUS the clipper's 2.5rem seam gap (`gap` lives on .marquee), so
+   track 2 lands exactly where track 1 began — identical keyframes on both
+   tracks, no 40px reset jump at the loop point. */
+.marquee-track {
+  will-change: transform;
+  animation: marquee-scroll 28s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-100% - 2.5rem));
+  }
+}
+
+/* ---- Ambient: scroll-cue chevron bounce -----------------------------------
+   The rotation is drawn via transform on base (sections.css); both frames
+   carry it so the bounce composes instead of clobbering. */
+.scroll-cue-chevron {
+  animation: cue-bounce 2s ease-in-out infinite alternate;
+}
+
+@keyframes cue-bounce {
+  from {
+    transform: translateY(0) rotate(45deg);
+  }
+
+  to {
+    transform: translateY(6px) rotate(45deg);
+  }
+}
+
+/* ---- Ambient: CTA glint ----------------------------------------------------
+   A light pass behind the label — hover/focus only, one run per entry.
+   z-index -1 keeps it under the copy (.btn isolates its own stacking), and
+   it sweeps on the individual translate channel so Task 2's transform lift
+   on the same hover composes instead of fighting. */
+.hero-cta .btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    color-mix(in oklab, var(--ink) 12%, transparent) 47%,
+    color-mix(in oklab, var(--ink) 24%, transparent) 50%,
+    color-mix(in oklab, var(--ink) 12%, transparent) 53%,
+    transparent 60%
+  );
+  opacity: 0;
+  translate: -1.75rem 0;
+  pointer-events: none;
+}
+
+.hero-cta .btn:hover::before,
+.hero-cta .btn:focus-visible::before {
+  animation: cta-sheen 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes cta-sheen {
+  0% {
+    opacity: 0;
+    translate: -1.75rem 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    translate: 1.75rem 0;
+  }
+}
+
+/* ---- Ambient: morph token crossfade ----------------------------------------
+   The demos panel becomes a live demo of "one token file recolors every
+   element": two stacked trios (sections.css) share one cell and the back one
+   — the same three tokens re-mixed, never new hues — fades over the front on
+   a slow alternate loop. The front layer counter-drifts half a beat so the
+   blend reads as a morph, not a slide-deck cut. transform + opacity only,
+   per the animated-channel law. Sections.css parks the back layer at
+   opacity: 0 at rest, so with the animation stripped the panel reads exactly
+   as the old static trio. */
+.morph .is-back {
+  animation: morph-crossfade 6s ease-in-out infinite alternate;
+}
+
+.morph .is-front {
+  animation: morph-counter-drift 6s ease-in-out infinite alternate;
+}
+
+@keyframes morph-crossfade {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-0.5rem);
+  }
+}
+
+@keyframes morph-counter-drift {
+  from {
+    transform: translateY(-0.25rem);
+  }
+
+  to {
+    transform: translateY(0.25rem);
+  }
+}
+
+/* ---- Ambient: terminal caret blink ------------------------------------------
+   The .is-typing hook terminal.js plants for the live session gets its CSS
+   consumer at last: a block caret after the typed text, blinking via
+   steps(2, jump-none) — solid / gone, no partial fades. The ▍ inside the
+   typed lines is literal console output and keeps typing untouched; when the
+   session completes .is-typing lifts and the caret vanishes, leaving only
+   the intrinsic final-line ▍ at rest. */
+.terminal.is-typing [data-terminal-output]::after {
+  content: "▍";
+  color: var(--accent-2);
+  animation: caret-blink 1s steps(2, jump-none) 0.15s infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---- Scroll-driven bonus ---------------------------------------------------
+   Progressive @supports only — browsers without scroll-driven timelines get
+   none of it and need no JS fallback (Task 4 owns the progress-rail JS
+   fallback for unsupported engines). */
+
+/* Gallery frames settle while entering the viewport: a 6deg perspective
+   tilt scrubs to zero across the first 65% of entry; the chip trails it. */
+@supports (animation-timeline: view()) {
+  .gallery-card {
+    animation: gallery-tilt linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 65%;
+  }
+
+  .gallery-chip {
+    animation: chip-in linear both;
+    animation-timeline: view();
+    animation-range: entry 15% entry 70%;
+  }
+}
+
+@keyframes gallery-tilt {
+  from {
+    transform: perspective(900px) rotateX(6deg);
+  }
+
+  to {
+    transform: perspective(900px) rotateX(0deg);
+  }
+}
+
+@keyframes chip-in {
+  from {
+    opacity: 0.15;
+    translate: 0 0.5rem;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* Progress rail grows with the document scroll; scaleX(0) at rest already
+   matches components.css, transform-origin: left is inherited from there. */
+@supports (animation-timeline: scroll()) {
+  #scroll-progress {
+    animation: progress-grow linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes progress-grow {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---- Reduced motion / motion-off parity ------------------------------------
+   One @media (prefers-reduced-motion: reduce) block and one html.motion-off
+   mirror (Task 4's #motion-toggle adds/removes the class on <html>). Both sit
+   AFTER the pre-state rules and both gate their reveal lines through the
+   ROOT state (`html.js` / `html.motion-off.js`): the classes all live on
+   <html>, so a descendant form like `html.motion-off .js [data-reveal]` can
+   never match (the root is not its own descendant) — after stripping the
+   `html.motion-off` prefix, the two blocks are selector-for-selector and
+   declaration-for-declaration identical. Nothing may rest at opacity: 0 in
+   either mode — neutralized pre-states resolve fully visible; killing the
+   scroll-scrubs returns their static states (flat cards, full-opacity chips
+   — fine; the progress rail simply stays empty at page top, its base state).
+   Accordion neutralizers are Task 2's (.panel-grid) — not duplicated here. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track,
+  .aurora,
+  .aurora--violet,
+  .aurora--cyan,
+  .aurora--gold,
+  .scroll-cue-chevron,
+  #scroll-progress,
+  .gallery-card,
+  .gallery-chip,
+  .morph .is-back, /* morph-crossfade */
+  .morph .is-front, /* morph-counter-drift */
+  .terminal.is-typing [data-terminal-output]::after { /* caret-blink */
+    animation: none;
+  }
+
+  html.js [data-reveal],
+  html.js [data-stagger] > * {
+    opacity: 1 !important;
+    translate: 0 0;
+    rotate: 0deg;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .hero-cta .btn::before {
+    animation: none;
+    opacity: 0 !important;
+    translate: 0 0 !important;
+    transition: none !important;
+  }
+}
+
+html.motion-off {
+  scroll-behavior: auto;
+}
+
+html.motion-off .marquee-track,
+html.motion-off .aurora,
+html.motion-off .aurora--violet,
+html.motion-off .aurora--cyan,
+html.motion-off .aurora--gold,
+html.motion-off .scroll-cue-chevron,
+html.motion-off #scroll-progress,
+html.motion-off .gallery-card,
+html.motion-off .gallery-chip,
+html.motion-off .morph .is-back, /* morph-crossfade */
+html.motion-off .morph .is-front, /* morph-counter-drift */
+html.motion-off .terminal.is-typing [data-terminal-output]::after { /* caret-blink */
+  animation: none;
+}
+
+/* Both matrices must read as identical. The reveal lines bridge the two
+   state hosts: unlike .panel-grid in Task 2's own alias, [data-reveal]'s
+   only class-gate (.js) lives ON <html>, so prefixing `html.motion-off `
+   in front of it can never match (the root is not its own descendant) —
+   the two classes chain on the root instead. Chained specificity
+   (0,3,1) still outranks the (0,2,0) pre-states outright. */
+html.motion-off.js [data-reveal],
+html.motion-off.js [data-stagger] > * {
+  opacity: 1 !important;
+  translate: 0 0;
+  rotate: 0deg;
+  transform: none !important;
+  transition: none !important;
+}
+
+html.motion-off .hero-cta .btn::before {
+  animation: none;
+  opacity: 0 !important;
+  translate: 0 0 !important;
+  transition: none !important;
+}

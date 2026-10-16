@@ -1,0 +1,222 @@
+/* ---------------------------------------------------------------------------
+   layout.css — Task 2 · page architecture
+   Overflow guard, .container scale, section rhythm, fixed glass header,
+   footer grid, stats band grid, paint containment for glass cards.
+   Components → components.css, per-section visuals → sections.css.
+--------------------------------------------------------------------------- */
+
+/* ---- Step 6 guard: no horizontal scroll, ever (paint clips behind) ---- */
+html,
+body {
+  overflow-x: clip;
+}
+
+/* ---- Container scale ---- */
+.container {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 3vw, 3rem);
+}
+
+/* Anchored sections clear the fixed header on keyboard jumps. */
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* ---- Section vertical rhythm (8px-scale clamps) ---- */
+main > section {
+  padding-block: clamp(5rem, 10vw, 9rem);
+}
+
+/* ---- Fixed header: glass bar, logo, nav, motion toggle, progress rail ---- */
+.site-header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* mobile: the primary nav wraps to its own centered row */
+  row-gap: 0.25rem;
+  gap: 2rem;
+  padding-block: 0.75rem;
+  background: color-mix(in oklab, var(--surface) 55%, transparent);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Scrolled state — effects.js toggles .is-scrolled past 8px. Static styling
+   only: the bar grows a visible seam and a drop shadow once the page moves. */
+.site-header.is-scrolled {
+  border-bottom-color: color-mix(in oklab, var(--ink) 22%, transparent);
+  box-shadow: 0 10px 30px rgb(5 5 10 / 0.35);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.logo svg {
+  display: block;
+}
+
+.site-header nav {
+  display: flex;
+  gap: 1.75rem;
+  margin-inline: auto;
+}
+
+/* Reset stripped link affordances back where UX requires them (Task 1 note).
+   A5 fix: at-rest underline stays visible at 40% ink so the affordance reads
+   without hover; hover/focus/active strengthen it to the full cyan. */
+.site-header nav a {
+  padding: 0.5rem 0.25rem;
+  color: var(--ink-dim);
+  text-decoration: underline;
+  text-underline-offset: 0.45em;
+  text-decoration-color: color-mix(in oklab, var(--ink) 40%, transparent);
+  transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    text-decoration-color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-header nav a:hover,
+.site-header nav a:focus-visible {
+  color: var(--ink);
+  text-decoration-color: var(--accent-2);
+}
+
+#motion-toggle {
+  flex-shrink: 0;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0.44rem 1rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#motion-toggle:hover,
+#motion-toggle:focus-visible {
+  color: var(--ink);
+  border-color: color-mix(in oklab, var(--accent) 65%, var(--line));
+}
+
+#motion-toggle[aria-pressed="true"] {
+  color: var(--accent-2);
+  border-color: color-mix(in oklab, var(--accent-2) 70%, transparent);
+}
+
+/* ---- Footer ---- */
+.footer {
+  border-top: 1px solid var(--line);
+  padding-block: clamp(4rem, 8vw, 6rem) 2.5rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.footer h3 {
+  margin-bottom: 1.25rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+.footer li {
+  color: var(--ink-dim);
+  font-size: 0.9375rem;
+}
+
+.footer li + li {
+  margin-top: 0.5rem;
+}
+
+.footer a {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--ink) 40%, transparent);
+  text-underline-offset: 0.35em;
+  transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    text-decoration-color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer a:hover,
+.footer a:focus-visible {
+  color: var(--ink);
+  text-decoration-color: color-mix(in oklab, var(--accent-2) 70%, transparent);
+}
+
+.footer-meta {
+  margin-top: clamp(3rem, 6vw, 4rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+}
+
+/* ---- Stats band grid (4 → 2 → 1) ---- */
+.stats {
+  border-block: 1px solid var(--line);
+}
+
+.stats-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+/* ---- Paint containment on glass art cards (Step 1 — no content-visibility:
+   it defers intersections and breaks IO reveals; containment clips the sheen
+   sweep and isolate repaints instead) ---- */
+.card,
+.gallery-card {
+  contain: layout style paint;
+}
+
+/* ---- Responsive architecture ---- */
+@media (max-width: 640px) {
+  /* D1 fix: navigation stays reachable on mobile — wrapped to a full-width
+     centered row under the logo + toggle instead of being hidden. */
+  .site-header nav {
+    order: 3;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .stats-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-list {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,157 @@
+/* ---------------------------------------------------------------------------
+   components.css — Task 2 · shared glass parts
+   Buttons (.btn / .btn-solid / .btn-ghost), the .card glass treatment
+   (tilt-ready, sheen sweep, clip-safe), the scroll-progress rail and the
+   marquee track base (motion.css owns the travel animation).
+   Transitions transform/opacity/color only · cubic-bezier(.22,1,.36,1).
+--------------------------------------------------------------------------- */
+
+/* ---- Buttons: pill, Space Grotesk 500, ≥40px targets ---- */
+.btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 2.75rem;
+  padding: 0.8rem 2.1rem;
+  border-radius: 999px;
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--ink);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn:active {
+  scale: 0.96;
+}
+
+/* Solid: violet→cyan gradient, dark ink. Its glow lives on a pseudo so the
+   shadow fades via opacity (color of the palette, opacity transition only).
+   A7 fix: the pure --accent end sat at a 4.54:1 contrast knife-edge for the
+   dark ink — opening the gradient with 15% mixed-in ink keeps the visual
+   read while giving the violet end AA headroom. */
+.btn-solid {
+  border: 1px solid transparent;
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--accent) 85%, var(--ink)),
+    var(--accent-2)
+  );
+  color: #0a0a12;
+}
+
+.btn-solid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: 0 8px 30px color-mix(in oklab, var(--accent) 45%, transparent);
+  opacity: 0;
+  transition: opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-solid:hover,
+.btn-solid:focus-visible {
+  transform: translateY(-2px);
+}
+
+.btn-solid:hover::after,
+.btn-solid:focus-visible::after {
+  opacity: 1;
+}
+
+/* Ghost: hairline pill that warms toward the accent. */
+.btn-ghost {
+  border: 1px solid var(--line);
+  background: color-mix(in oklab, var(--surface) 40%, transparent);
+}
+
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+
+/* Soft pill-blocked focus replaces the default ring on filled buttons;
+   the global :focus-visible outline stays for every other control. */
+.btn:focus-visible {
+  outline: none;
+}
+
+.btn-solid:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent-2);
+}
+
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 4px;
+}
+
+/* ---- Glass card (bento): hover = accent seam + light sweep ---- */
+.card {
+  position: relative;
+  padding: 1.75rem;
+  min-height: 15rem;
+  background: color-mix(in oklab, var(--surface) 55%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  transform-style: preserve-3d;
+  transition: border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
+}
+
+/* Sheen sweep: exists purely on hover, a translated gradient clipped by the
+   card's paint containment. */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 42%,
+    color-mix(in oklab, var(--ink) 7%, transparent) 48%,
+    color-mix(in oklab, var(--ink) 11%, transparent) 50%,
+    transparent 58%
+  );
+  transform: translateX(-130%);
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover::after,
+.card:focus-within::after {
+  transform: translateX(130%);
+  opacity: 1;
+}
+
+/* ---- Scroll-progress rail (header child; JS drives scaleX) ---- */
+#scroll-progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ---- Marquee track base (chrome + typography in sections.css) ---- */
+.marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2.5rem;
+}
