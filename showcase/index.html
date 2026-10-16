@@ -11,6 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@500;700&display=swap">
   <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/layout.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/sections.css">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -43,18 +46,19 @@
   </header>
 
   <main id="main">
-    <section class="hero" id="hero">
+    <section class="hero container" id="hero">
       <p class="kicker">GLM 5.3 FLASH × OPENCODE</p>
       <h1 data-stagger data-reveal>
         <span class="hero-line">DESIGN</span>
-        <span class="hero-line">ENGINEERED</span>
+        <span class="hero-line grad-text">ENGINEERED</span>
         <span class="hero-line hero-line--long">BY INTELLIGENCE.</span>
       </h1>
-      <p>A showcase of what GLM 5.3 Flash builds in a single session — cinematic motion, editorial type, zero dependencies. Every pixel on this page was written by a machine with taste.</p>
-      <div>
+      <p class="hero-lede">A showcase of what GLM 5.3 Flash builds in a single session — cinematic motion, editorial type, zero dependencies. Every pixel on this page was written by a machine with taste.</p>
+      <div class="hero-cta">
         <a class="btn btn-solid" href="#gallery" data-magnetic>See the work</a>
         <a class="btn btn-ghost" href="#demos" data-magnetic>How it's built</a>
       </div>
+      <a class="scroll-cue" href="#bento" aria-label="Scroll to capabilities"><span class="scroll-cue-chevron" aria-hidden="true"></span>SCROLL</a>
     </section>
 
     <section class="marquee" aria-label="Capabilities">
@@ -96,58 +100,66 @@
       </div>
     </section>
 
-    <section class="bento" id="bento">
+    <section class="bento container" id="bento">
       <p class="kicker">01 / CAPABILITIES</p>
       <h2 data-reveal>Built like a studio, in one pass.</h2>
-      <div>
-        <article class="card" data-tilt data-reveal>
-          <span>A</span>
+      <div class="bento-grid">
+        <article class="card card--type" data-tilt data-reveal>
+          <span class="card-art card-art--type" aria-hidden="true">Aa</span>
+          <span class="card-tag">A</span>
           <h3>Typography Engine</h3>
           <p>Uppercase Space Grotesk lines, tracked tight, revealed line by line.</p>
         </article>
-        <article class="card" data-tilt data-reveal>
-          <span>B</span>
+        <article class="card card--motion" data-tilt data-reveal>
+          <span class="card-art card-art--motion" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="card-tag">B</span>
           <h3>Motion Systems</h3>
           <p>Transform-and-opacity choreography that never competes with itself.</p>
         </article>
-        <article class="card" data-tilt data-reveal>
-          <span>C</span>
+        <article class="card card--aurora" data-tilt data-reveal>
+          <span class="card-art card-art--aurora" aria-hidden="true"></span>
+          <span class="card-tag">C</span>
           <h3>Aurora Rendering</h3>
           <p>Three blurred color fields blended straight into the canvas.</p>
         </article>
-        <article class="card" data-tilt data-reveal>
-          <span>D</span>
+        <article class="card card--micro" data-tilt data-reveal>
+          <span class="card-art card-art--micro" aria-hidden="true"></span>
+          <span class="card-tag">D</span>
           <h3>Micro-interactions</h3>
           <p>Magnetic buttons, tilting cards, hover answers everywhere.</p>
         </article>
-        <article class="card" data-tilt data-reveal>
-          <span>E</span>
+        <article class="card card--adaptive" data-tilt data-reveal>
+          <span class="card-art card-art--adaptive" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="card-tag">E</span>
           <h3>Adaptive Layouts</h3>
           <p>Fluid clamps and bento spans that reflow cleanly from 360px to 4K.</p>
         </article>
-        <article class="card" data-tilt data-reveal>
-          <span>F</span>
+        <article class="card card--zero" data-tilt data-reveal>
+          <span class="card-art card-art--zero" aria-hidden="true">0</span>
+          <span class="card-tag">F</span>
           <h3>Dependency Zero</h3>
           <p>No frameworks, no bundler: just HTML, CSS and a few small ES modules.</p>
         </article>
       </div>
     </section>
 
-    <section class="demos" id="demos">
+    <section class="demos container" id="demos">
       <p class="kicker">02 / INTERACTIVE</p>
       <h2 data-reveal>Proof, not promises.</h2>
-      <div>
+      <div class="demos-grid">
         <div class="terminal">
           <div class="terminal-bar" aria-hidden="true"><span></span><span></span><span></span></div>
           <pre data-terminal-output></pre>
           <p data-terminal-idle>▍ idle</p>
         </div>
-        <div class="morph" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
+        <div class="morph-panel">
+          <div class="morph" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <p class="morph-label">One token file recolors every element.</p>
         </div>
-        <p class="morph-label">One token file recolors every element.</p>
         <div class="manifesto-accordion" data-accordion>
           <button data-accordion-trigger id="step-trigger-1" aria-expanded="false" aria-controls="step-panel-1">Research</button>
           <div class="panel-grid">
@@ -177,40 +189,43 @@
       </div>
     </section>
 
-    <section class="stats" id="stats" aria-label="Runtime numbers">
+    <section class="stats container" id="stats" aria-label="Runtime numbers">
       <p class="kicker">03 / RUNTIME NUMBERS</p>
-      <ul>
-        <li><span data-count="0">0</span><span>npm dependencies</span></li>
-        <li><span data-count="60">60</span><span>fps animations</span></li>
-        <li><span data-count="100">100</span><span>lighthouse target</span></li>
-        <li><span data-count="1">1</span><span>session</span></li>
+      <ul class="stats-list">
+        <li class="stat"><span class="stat-value" data-count="0">0</span><span class="stat-label">npm dependencies</span></li>
+        <li class="stat"><span class="stat-value" data-count="60">60</span><span class="stat-label">fps animations</span></li>
+        <li class="stat"><span class="stat-value" data-count="100">100</span><span class="stat-label">lighthouse target</span></li>
+        <li class="stat"><span class="stat-value" data-count="1">1</span><span class="stat-label">session</span></li>
       </ul>
     </section>
 
-    <section class="gallery" id="gallery">
+    <section class="gallery container" id="gallery">
       <p class="kicker">04 / SELECTED FRAMES</p>
       <h2 data-reveal>Machines can shoot film now.</h2>
-      <div>
-        <article class="gallery-card">
-          <h3>NEBULA</h3>
+      <div class="gallery-grid">
+        <article class="gallery-card gallery-card--nebula">
+          <div class="gallery-art" aria-hidden="true"></div>
+          <h3 class="gallery-chip">NEBULA</h3>
         </article>
-        <article class="gallery-card">
-          <h3>CASCADE</h3>
+        <article class="gallery-card gallery-card--cascade">
+          <div class="gallery-art" aria-hidden="true"></div>
+          <h3 class="gallery-chip">CASCADE</h3>
         </article>
-        <article class="gallery-card">
-          <h3>MONOLITH</h3>
+        <article class="gallery-card gallery-card--monolith">
+          <div class="gallery-art" aria-hidden="true"></div>
+          <h3 class="gallery-chip">MONOLITH</h3>
         </article>
       </div>
     </section>
 
     <section class="manifesto" id="manifesto" aria-label="Manifesto">
-      <p class="font-display" data-reveal>The prompt was one sentence. The rest is taste.</p>
+      <p class="font-display grad-text manifesto-statement" data-reveal>The prompt was one sentence. The rest is taste.</p>
       <a class="btn btn-ghost" href="#demos" data-magnetic>How it's built</a>
     </section>
   </main>
 
   <footer class="footer">
-    <div>
+    <div class="container footer-grid">
       <div>
         <h3>Explore</h3>
         <ul>
@@ -237,7 +252,7 @@
         </ul>
       </div>
     </div>
-    <p>Built by GLM 5.3 Flash · OpenCode orchestration · Space Grotesk × Inter × JetBrains Mono</p>
+    <p class="container footer-meta">Built by GLM 5.3 Flash · OpenCode orchestration · Space Grotesk × Inter × JetBrains Mono</p>
   </footer>
 </body>
 </html>
