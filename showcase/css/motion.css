@@ -2,9 +2,11 @@
    motion.css — Task 3 · the motion system
    Reveal cascade ([data-reveal]/[data-stagger] pre-states + .is-revealed
    toggles), ambient layer (aurora drift, marquee travel, scroll-cue bounce,
-   CTA glint), the scroll-driven bonus (gallery scrub, progress rail) and the
+   CTA glint, the morph token crossfade, the terminal caret blink), the
+   scroll-driven bonus (gallery scrub, progress rail) and the
    reduced-motion / html.motion-off parity pair that neutralizes all of it.
-   JS-free: Task 4 only toggles .js / .is-revealed / .motion-off.
+   The ambients are JS-free: Task 4 only toggles .js / .is-revealed /
+   .motion-off, and the caret additionally rides terminal.js's .is-typing.
    Animated channels: transform + opacity + the individual translate/rotate
    properties (so JS tilt and Task 2's transform hover lifts never collide).
    Easing rides the page-wide cubic-bezier(0.22, 1, 0.36, 1). No new colors.
@@ -210,6 +212,64 @@
   }
 }
 
+/* ---- Ambient: morph token crossfade ----------------------------------------
+   The demos panel becomes a live demo of "one token file recolors every
+   element": two stacked trios (sections.css) share one cell and the back one
+   — the same three tokens re-mixed, never new hues — fades over the front on
+   a slow alternate loop. The front layer counter-drifts half a beat so the
+   blend reads as a morph, not a slide-deck cut. transform + opacity only,
+   per the animated-channel law. Sections.css parks the back layer at
+   opacity: 0 at rest, so with the animation stripped the panel reads exactly
+   as the old static trio. */
+.morph .is-back {
+  animation: morph-crossfade 6s ease-in-out infinite alternate;
+}
+
+.morph .is-front {
+  animation: morph-counter-drift 6s ease-in-out infinite alternate;
+}
+
+@keyframes morph-crossfade {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-0.5rem);
+  }
+}
+
+@keyframes morph-counter-drift {
+  from {
+    transform: translateY(-0.25rem);
+  }
+
+  to {
+    transform: translateY(0.25rem);
+  }
+}
+
+/* ---- Ambient: terminal caret blink ------------------------------------------
+   The .is-typing hook terminal.js plants for the live session gets its CSS
+   consumer at last: a block caret after the typed text, blinking via
+   steps(2, jump-none) — solid / gone, no partial fades. The ▍ inside the
+   typed lines is literal console output and keeps typing untouched; when the
+   session completes .is-typing lifts and the caret vanishes, leaving only
+   the intrinsic final-line ▍ at rest. */
+.terminal.is-typing [data-terminal-output]::after {
+  content: "▍";
+  color: var(--accent-2);
+  animation: caret-blink 1s steps(2, jump-none) 0.15s infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
 /* ---- Scroll-driven bonus ---------------------------------------------------
    Progressive @supports only — browsers without scroll-driven timelines get
    none of it and need no JS fallback (Task 4 owns the progress-rail JS
@@ -298,7 +358,10 @@
   .scroll-cue-chevron,
   #scroll-progress,
   .gallery-card,
-  .gallery-chip {
+  .gallery-chip,
+  .morph .is-back, /* morph-crossfade */
+  .morph .is-front, /* morph-counter-drift */
+  .terminal.is-typing [data-terminal-output]::after { /* caret-blink */
     animation: none;
   }
 
@@ -331,7 +394,10 @@ html.motion-off .aurora--gold,
 html.motion-off .scroll-cue-chevron,
 html.motion-off #scroll-progress,
 html.motion-off .gallery-card,
-html.motion-off .gallery-chip {
+html.motion-off .gallery-chip,
+html.motion-off .morph .is-back, /* morph-crossfade */
+html.motion-off .morph .is-front, /* morph-counter-drift */
+html.motion-off .terminal.is-typing [data-terminal-output]::after { /* caret-blink */
   animation: none;
 }
 

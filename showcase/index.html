@@ -160,10 +160,21 @@
           <p class="sr-only" role="status" data-terminal-summary></p>
         </div>
         <div class="morph-panel">
+          <!-- Live token crossfade, pure CSS: two stacked trios share one grid
+               cell; the back layer re-mixes the same three tokens and fades
+               over the front on an ambient loop (motion.css; both parity
+               blocks neutralize it — reduced motion keeps the front trio). -->
           <div class="morph" aria-hidden="true">
-            <span></span>
-            <span></span>
-            <span></span>
+            <div class="morph-layer is-front">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="morph-layer is-back">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
           <p class="morph-label">One token file recolors every element.</p>
         </div>

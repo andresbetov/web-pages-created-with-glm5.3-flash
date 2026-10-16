@@ -417,7 +417,12 @@
   color: color-mix(in oklab, #22d3ee 78%, transparent);
 }
 
-/* Morph: token swatches (JS recolors them later). */
+/* Morph: a live demo of the token crossfade, pure CSS — two stacked trios
+   share one grid cell. The front layer is the shipped palette
+   (accent / accent-2 / gold); the back layer re-mixes the same three tokens
+   into a different triage (each swatch blends its neighbor's hue in). No new
+   colors anywhere. motion.css owns the ambient crossfade and the parity pair
+   neutralizes it — reduced motion keeps the static front trio. */
 .morph-panel {
   display: flex;
   flex-direction: column;
@@ -425,19 +430,24 @@
 }
 
 .morph {
+  display: grid; /* layers stack in one shared cell */
+}
+
+.morph-layer {
+  grid-area: 1 / 1;
   display: flex;
   justify-content: center;
   gap: 1rem;
 }
 
-.morph span {
+.morph-layer span {
   width: 4rem;
   height: 4rem;
   border: 1px solid color-mix(in oklab, var(--ink) 14%, transparent);
   border-radius: 1rem;
 }
 
-.morph span:nth-child(1) {
+.morph-layer.is-front span:nth-child(1) {
   background: linear-gradient(
     150deg,
     var(--accent),
@@ -445,7 +455,7 @@
   );
 }
 
-.morph span:nth-child(2) {
+.morph-layer.is-front span:nth-child(2) {
   background: linear-gradient(
     150deg,
     var(--accent-2),
@@ -453,11 +463,37 @@
   );
 }
 
-.morph span:nth-child(3) {
+.morph-layer.is-front span:nth-child(3) {
   background: linear-gradient(
     150deg,
     var(--gold),
     color-mix(in oklab, var(--gold) 55%, var(--bg))
+  );
+}
+
+/* Back trio: the same tokens re-mixed — accent-2 leaning accent, gold
+   leaning accent-2, accent leaning gold. Token-derived, never new hues. */
+.morph-layer.is-back span:nth-child(1) {
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--accent-2) 70%, var(--accent)),
+    color-mix(in oklab, var(--accent-2) 48%, var(--bg))
+  );
+}
+
+.morph-layer.is-back span:nth-child(2) {
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--gold) 70%, var(--accent-2)),
+    color-mix(in oklab, var(--gold) 48%, var(--bg))
+  );
+}
+
+.morph-layer.is-back span:nth-child(3) {
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--accent) 70%, var(--gold)),
+    color-mix(in oklab, var(--accent) 48%, var(--bg))
   );
 }
 

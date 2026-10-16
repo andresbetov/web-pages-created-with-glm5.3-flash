@@ -4,8 +4,9 @@
    The motion state is checked live between characters: reduced-motion or
    motion-off (before or mid-type) print everything instantly — the text is
    the content, so it must land complete either way. .is-typing marks the
-   active session for CSS to hang a cursor-blink rule on (none shipped yet;
-   the visible caret is the ▍ the type loop carries).
+   active session — motion.css hangs the blinking block caret on it while it
+   stands and removes it when the session completes; the ▍ inside the typed
+   lines is literal console output and stays for good.
 
    Screen-reader parity (A1): typed characters stay silent — the pre is not a
    live region. When the session completes (typed, printed or mid-flip), one
@@ -63,13 +64,11 @@ export function initTerminal(motion) {
           return;
         }
         printed += char;
-        output.textContent = printed
-          + (i === TERMINAL_LINES.length - 1 ? '' : '▍'); // final line carries its own caret
+        output.textContent = printed; // the caret is motion.css's ::after, never text
         await sleep(TYPE_CHAR_MS);
       }
     }
-    output.textContent = printed; // strip the live caret; the last line has its own ▍
-    terminal.classList.remove('is-typing');
+    terminal.classList.remove('is-typing'); // caret leaves with .is-typing
     complete();
   };
 
