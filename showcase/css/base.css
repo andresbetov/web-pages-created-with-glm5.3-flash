@@ -1,0 +1,184 @@
+/* ---------------------------------------------------------------------------
+   base.css — Task 1 · the design contract
+   Tokens, modern reset, ambient layer bases (aurora ×3 / grain / cursor-glow),
+   global type utilities (.font-display / .kicker) and a11y primitives
+   (:focus-visible, .skip-link, ::selection).
+   Layout, components, sections and motion are owned by Tasks 2–3.
+   Animated properties here and below: transform + opacity only (plus the
+   decorative blur on the prefilled aurora blobs).
+--------------------------------------------------------------------------- */
+
+/* ---- Pinned tokens (contract — names must not change) ---- */
+:root {
+  --bg: #0a0a12;
+  --ink: #f4f4f8;
+  --ink-dim: color-mix(in oklab, var(--ink) 64%, transparent);
+  --accent: #7c5cff;
+  --accent-2: #22d3ee;
+  --gold: #fbbf24;
+  --surface: #131320;
+  --line: color-mix(in oklab, var(--ink) 12%, transparent);
+}
+
+/* ---- Modern reset ---- */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* UA forms and lists would fight the dark canvas otherwise. */
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---- Canvas + body typography ---- */
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Type utilities ---- */
+.font-display {
+  font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.kicker {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: var(--accent-2);
+}
+
+/* ---- Ambient layer: aurora blobs (drift owns transform, Task 3) ----
+   Positioned with left/top (never transform) so the drift keyframes have
+   free use of the transform property. Fixed layers cannot create overflow. */
+.aurora {
+  position: fixed;
+  z-index: -1;
+  width: 40rem;
+  height: 40rem;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.45;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.aurora:nth-of-type(1) {
+  top: -16rem;
+  left: -14rem;
+  width: 44rem;
+  height: 44rem;
+  background: color-mix(in oklab, var(--accent) 55%, var(--bg)); /* violet */
+}
+
+.aurora:nth-of-type(2) {
+  top: 24%;
+  right: -12rem;
+  width: 38rem;
+  height: 38rem;
+  background: color-mix(in oklab, var(--accent-2) 40%, var(--bg)); /* cyan */
+}
+
+.aurora:nth-of-type(3) {
+  bottom: -18rem;
+  left: 18%;
+  width: 46rem;
+  height: 46rem;
+  background: color-mix(in oklab, var(--gold) 34%, var(--bg)); /* gold */
+}
+
+/* ---- Ambient layer: film grain (hardware-cheap static overlay) ---- */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  opacity: 0.05;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 256 256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- Ambient layer: cursor glow (translate3d comes from effects.js) ----
+   Parked off-canvas until JS takes over so no stray blob shows pre-attach. */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 24rem;
+  height: 24rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle closest-side,
+    color-mix(in oklab, var(--accent) 20%, transparent),
+    transparent
+  );
+  transform: translate3d(-64rem, -64rem, 0);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* ---- Accessibility primitives ---- */
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+  padding: 0.75rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}

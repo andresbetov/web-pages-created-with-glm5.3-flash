@@ -1,0 +1,1 @@
+{"name":"web-pages-created-with-glm5.3-flash","private":true,"type":"module","scripts":{"dev":"npx --yes serve showcase -l 5173"},"devDependencies":{"playwright-core":"^1.49.0"}}
