@@ -36,6 +36,8 @@ main > section {
   z-index: 5;
   display: flex;
   align-items: center;
+  flex-wrap: wrap; /* mobile: the primary nav wraps to its own centered row */
+  row-gap: 0.25rem;
   gap: 2rem;
   padding-block: 0.75rem;
   background: color-mix(in oklab, var(--surface) 55%, transparent);
@@ -182,8 +184,15 @@ main > section {
 
 /* ---- Responsive architecture ---- */
 @media (max-width: 640px) {
+  /* D1 fix: navigation stays reachable on mobile — wrapped to a full-width
+     centered row under the logo + toggle instead of being hidden. */
   .site-header nav {
-    display: none;
+    order: 3;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    font-size: 0.8125rem;
   }
 
   .footer-grid {
