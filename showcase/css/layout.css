@@ -63,13 +63,15 @@ main > section {
   margin-inline: auto;
 }
 
-/* Reset stripped link affordances back where UX requires them (Task 1 note). */
+/* Reset stripped link affordances back where UX requires them (Task 1 note).
+   A5 fix: at-rest underline stays visible at 40% ink so the affordance reads
+   without hover; hover/focus/active strengthen it to the full cyan. */
 .site-header nav a {
   padding: 0.5rem 0.25rem;
   color: var(--ink-dim);
   text-decoration: underline;
   text-underline-offset: 0.45em;
-  text-decoration-color: transparent;
+  text-decoration-color: color-mix(in oklab, var(--ink) 40%, transparent);
   transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1),
     text-decoration-color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -78,7 +80,7 @@ main > section {
 .site-header nav a:focus-visible,
 .site-header nav a[aria-current="true"] {
   color: var(--ink);
-  text-decoration-color: color-mix(in oklab, var(--accent-2) 80%, transparent);
+  text-decoration-color: var(--accent-2);
 }
 
 #motion-toggle {
@@ -141,7 +143,7 @@ main > section {
 
 .footer a {
   text-decoration: underline;
-  text-decoration-color: var(--line);
+  text-decoration-color: color-mix(in oklab, var(--ink) 40%, transparent);
   text-underline-offset: 0.35em;
   transition: color 0.2s cubic-bezier(0.22, 1, 0.36, 1),
     text-decoration-color 0.2s cubic-bezier(0.22, 1, 0.36, 1);

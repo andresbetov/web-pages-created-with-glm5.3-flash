@@ -42,7 +42,7 @@
       <a href="#demos">Demo</a>
       <a href="#gallery">Gallery</a>
     </nav>
-    <button id="motion-toggle" type="button" aria-pressed="false">Motion</button>
+    <button id="motion-toggle" type="button" aria-pressed="false">Reduce motion</button>
     <div id="scroll-progress" aria-hidden="true"></div>
   </header>
 
@@ -76,14 +76,14 @@
              display:contents keeps all 16 spans as flex items so the loop seam
              and the 2.5rem rhythm stay untouched. -->
         <span aria-hidden="true" style="display:contents">
-          <span>KINETIC TYPE</span>
-          <span>AURORA MESH</span>
-          <span>SCROLL CHOREOGRAPHY</span>
-          <span>MAGNETIC UI</span>
-          <span>BENTO GRIDS</span>
-          <span>GLASS MORPHISM</span>
-          <span>GRAIN OVERLAYS</span>
-          <span>ZERO DEPENDENCIES</span>
+          <span aria-hidden="true">KINETIC TYPE</span>
+          <span aria-hidden="true">AURORA MESH</span>
+          <span aria-hidden="true">SCROLL CHOREOGRAPHY</span>
+          <span aria-hidden="true">MAGNETIC UI</span>
+          <span aria-hidden="true">BENTO GRIDS</span>
+          <span aria-hidden="true">GLASS MORPHISM</span>
+          <span aria-hidden="true">GRAIN OVERLAYS</span>
+          <span aria-hidden="true">ZERO DEPENDENCIES</span>
         </span>
       </div>
       <div class="marquee-track" aria-hidden="true">
@@ -157,6 +157,7 @@
           <div class="terminal-bar" aria-hidden="true"><span></span><span></span><span></span></div>
           <pre data-terminal-output></pre>
           <p data-terminal-idle>▍ idle</p>
+          <p class="sr-only" role="status" data-terminal-summary></p>
         </div>
         <div class="morph-panel">
           <div class="morph" aria-hidden="true">
@@ -198,10 +199,29 @@
     <section class="stats container" id="stats" aria-label="Runtime numbers">
       <p class="kicker">03 / RUNTIME NUMBERS</p>
       <ul class="stats-list">
-        <li class="stat"><span class="stat-value" data-count="0">0</span><span class="stat-label">npm dependencies</span></li>
-        <li class="stat"><span class="stat-value" data-count="60">60</span><span class="stat-label">fps animations</span></li>
-        <li class="stat"><span class="stat-value" data-count="100">100</span><span class="stat-label">lighthouse target</span></li>
-        <li class="stat"><span class="stat-value" data-count="1">1</span><span class="stat-label">session</span></li>
+        <!-- A3 fix: the counting value and its visible label are both hidden
+             from AT; one sr-only sibling carries the FINAL complete statement
+             so exactly one full stat is announced (no count-up churn). -->
+        <li class="stat">
+          <span class="stat-value" data-count="0" aria-hidden="true">0</span>
+          <span class="stat-label" aria-hidden="true">npm dependencies</span>
+          <span class="sr-only">0 npm dependencies</span>
+        </li>
+        <li class="stat">
+          <span class="stat-value" data-count="60" aria-hidden="true">60</span>
+          <span class="stat-label" aria-hidden="true">fps animations</span>
+          <span class="sr-only">60 fps animations</span>
+        </li>
+        <li class="stat">
+          <span class="stat-value" data-count="100" aria-hidden="true">100</span>
+          <span class="stat-label" aria-hidden="true">lighthouse target</span>
+          <span class="sr-only">100 lighthouse target</span>
+        </li>
+        <li class="stat">
+          <span class="stat-value" data-count="1" aria-hidden="true">1</span>
+          <span class="stat-label" aria-hidden="true">session</span>
+          <span class="sr-only">1 session</span>
+        </li>
       </ul>
     </section>
 

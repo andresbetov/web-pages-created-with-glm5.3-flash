@@ -6,6 +6,11 @@
    the content, so it must land complete either way. .is-typing marks the
    active session for CSS to hang a cursor-blink rule on (none shipped yet;
    the visible caret is the ▍ the type loop carries).
+
+   Screen-reader parity (A1): typed characters stay silent — the pre is not a
+   live region. When the session completes (typed, printed or mid-flip), one
+   visually-hidden summary line lands in the [data-terminal-summary] status
+   paragraph so AT hears a single complete statement instead of a token stream.
 --------------------------------------------------------------------------- */
 
 const REVEAL_THRESHOLD = 0.15;
@@ -13,6 +18,8 @@ const REVEAL_ROOT_MARGIN = '0px 0px -10% 0px';
 const TYPE_CHAR_MS = 18;
 const COMMAND_BEAT_MS = 420; // the prompt "executes" before output streams
 const LINE_BEAT_MS = 140;
+const SESSION_SUMMARY =
+  'Session complete — tokens OK, animations OK, contrast AA, zero dependencies.';
 
 const TERMINAL_LINES = [
   '$ opencode run showcase',
@@ -28,11 +35,17 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 export function initTerminal(motion) {
   const terminal = document.querySelector('.terminal');
   const output = document.querySelector('[data-terminal-output]');
+  const summary = document.querySelector('[data-terminal-summary]');
   const idle = document.querySelector('[data-terminal-idle]');
   if (!terminal || !output) return;
 
+  const complete = () => {
+    if (summary) summary.textContent = SESSION_SUMMARY; // textContent: idempotent, never repeats
+  };
+
   const printAll = () => {
     output.textContent = TERMINAL_LINES.join('\n');
+    complete();
   };
 
   const type = async () => {
@@ -56,6 +69,7 @@ export function initTerminal(motion) {
     }
     output.textContent = printed; // strip the live caret; the last line has its own ▍
     terminal.classList.remove('is-typing');
+    complete();
   };
 
   const observer = new IntersectionObserver((entries) => {
