@@ -592,8 +592,7 @@
   }
 }
 
-html.motion-off .panel-grid,
-html.motion-reduce .panel-grid {
+html.motion-off .panel-grid {
   transition: none;
 }
 

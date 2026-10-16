@@ -44,6 +44,13 @@ main > section {
   border-bottom: 1px solid var(--line);
 }
 
+/* Scrolled state — effects.js toggles .is-scrolled past 8px. Static styling
+   only: the bar grows a visible seam and a drop shadow once the page moves. */
+.site-header.is-scrolled {
+  border-bottom-color: color-mix(in oklab, var(--ink) 22%, transparent);
+  box-shadow: 0 10px 30px rgb(5 5 10 / 0.35);
+}
+
 .logo {
   display: inline-flex;
   align-items: center;
@@ -77,8 +84,7 @@ main > section {
 }
 
 .site-header nav a:hover,
-.site-header nav a:focus-visible,
-.site-header nav a[aria-current="true"] {
+.site-header nav a:focus-visible {
   color: var(--ink);
   text-decoration-color: var(--accent-2);
 }
