@@ -4,8 +4,8 @@ import { chromium } from 'playwright-core';
 import { mkdirSync } from 'node:fs';
 
 const BASE = process.env.SHOT_URL ?? 'http://localhost:5173';
-const OUT = '/tmp/opencode/qa-shots';
-const EXE = '/usr/bin/chromium';
+const OUT = process.env.SHOT_DIR ?? '/tmp/opencode/qa-shots';
+const EXE = process.env.CHROME ?? '/usr/bin/chromium';
 mkdirSync(OUT, { recursive: true });
 
 // Sandboxed networks can stall the Google Fonts round-trip at capture time

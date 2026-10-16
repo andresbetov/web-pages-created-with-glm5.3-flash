@@ -14,6 +14,16 @@ A showcase gallery of premium web pages handcrafted by an AI agent (GLM 5.3 Flas
 npm run dev    # serve locally (uses npx serve)
 ```
 
+## QA
+
+Headless visual checks run against a served page with Playwright (playwright-core driving the system Chromium):
+
+```bash
+npm run screenshot   # captures /tmp/opencode/qa-shots and logs overflow/motion assertions
+```
+
+Overrides via environment variables: `SHOT_URL` (target origin, default `http://localhost:5173`), `SHOT_DIR` (output directory, default `/tmp/opencode/qa-shots`), `CHROME` (Chromium executable, default `/usr/bin/chromium`).
+
 ## Deployment
 
 GitHub Pages via `/.github/workflows/deploy.yml` on every push to `main`.
