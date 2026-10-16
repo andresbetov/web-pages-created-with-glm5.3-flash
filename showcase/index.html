@@ -72,14 +72,19 @@
         <span>GLASS MORPHISM</span>
         <span>GRAIN OVERLAYS</span>
         <span>ZERO DEPENDENCIES</span>
-        <span>KINETIC TYPE</span>
-        <span>AURORA MESH</span>
-        <span>SCROLL CHOREOGRAPHY</span>
-        <span>MAGNETIC UI</span>
-        <span>BENTO GRIDS</span>
-        <span>GLASS MORPHISM</span>
-        <span>GRAIN OVERLAYS</span>
-        <span>ZERO DEPENDENCIES</span>
+        <!-- Duplicated second half: aria-hidden hides it from AT (one set heard);
+             display:contents keeps all 16 spans as flex items so the loop seam
+             and the 2.5rem rhythm stay untouched. -->
+        <span aria-hidden="true" style="display:contents">
+          <span>KINETIC TYPE</span>
+          <span>AURORA MESH</span>
+          <span>SCROLL CHOREOGRAPHY</span>
+          <span>MAGNETIC UI</span>
+          <span>BENTO GRIDS</span>
+          <span>GLASS MORPHISM</span>
+          <span>GRAIN OVERLAYS</span>
+          <span>ZERO DEPENDENCIES</span>
+        </span>
       </div>
       <div class="marquee-track" aria-hidden="true">
         <span>KINETIC TYPE</span>
@@ -255,5 +260,7 @@
     </div>
     <p class="container footer-meta">Built by GLM 5.3 Flash · OpenCode orchestration · Space Grotesk × Inter × JetBrains Mono</p>
   </footer>
+
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>
