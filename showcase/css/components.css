@@ -31,10 +31,17 @@
 }
 
 /* Solid: violet→cyan gradient, dark ink. Its glow lives on a pseudo so the
-   shadow fades via opacity (color of the palette, opacity transition only). */
+   shadow fades via opacity (color of the palette, opacity transition only).
+   A7 fix: the pure --accent end sat at a 4.54:1 contrast knife-edge for the
+   dark ink — opening the gradient with 15% mixed-in ink keeps the visual
+   read while giving the violet end AA headroom. */
 .btn-solid {
   border: 1px solid transparent;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--accent) 85%, var(--ink)),
+    var(--accent-2)
+  );
   color: #0a0a12;
 }
 

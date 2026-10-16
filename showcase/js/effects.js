@@ -61,6 +61,10 @@ function initScrollEffects(motion) {
   update();
 }
 
+/* A8 fix: the glow's half-size is a one-time const — measured at first
+   placement (display:none would read 0, so placement-gated) and re-derived
+   by the resize listener. Replaces per-tick offsetWidth reads, which forced
+   layout every animated frame. */
 function initCursorGlow(motion) {
   const glow = document.querySelector('.cursor-glow');
   if (!glow) return;
@@ -71,8 +75,16 @@ function initCursorGlow(motion) {
   let currentY = 0;
   let raf = 0;
   let placed = false;
+  let glowHx = 0;
+  let glowHy = 0;
 
   const allowed = () => finePointer.matches && motion.enabled;
+
+  const measureGlow = () => {
+    if (!placed) return; // parked (display:none) reads report 0 — re-measure on placement
+    glowHx = glow.offsetWidth / 2;
+    glowHy = glow.offsetHeight / 2;
+  };
 
   const park = () => {
     glow.style.display = 'none'; // display, not off-canvas translate: a parked
@@ -100,7 +112,7 @@ function initCursorGlow(motion) {
     currentX += (targetX - currentX) * GLOW_LERP;
     currentY += (targetY - currentY) * GLOW_LERP;
     glow.style.transform =
-      `translate3d(${currentX - glow.offsetWidth / 2}px, ${currentY - glow.offsetHeight / 2}px, 0)`;
+      `translate3d(${currentX - glowHx}px, ${currentY - glowHy}px, 0)`;
     const settled = Math.abs(targetX - currentX) < GLOW_SETTLE_PX
       && Math.abs(targetY - currentY) < GLOW_SETTLE_PX;
     if (!settled) raf = requestAnimationFrame(tick);
@@ -114,11 +126,13 @@ function initCursorGlow(motion) {
       currentX = targetX;
       currentY = targetY;
       placed = true;
+      measureGlow(); // capture half-size consts at first placement
     }
     if (!raf) raf = requestAnimationFrame(tick);
   }, { passive: true });
 
   finePointer.addEventListener('change', applyState);
+  window.addEventListener('resize', measureGlow, { passive: true });
   motion.subscribe(applyState);
   applyState();
 }

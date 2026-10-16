@@ -63,7 +63,8 @@ export function initTerminal(motion) {
           return;
         }
         printed += char;
-        output.textContent = `${printed}▍`;
+        output.textContent = printed
+          + (i === TERMINAL_LINES.length - 1 ? '' : '▍'); // final line carries its own caret
         await sleep(TYPE_CHAR_MS);
       }
     }
