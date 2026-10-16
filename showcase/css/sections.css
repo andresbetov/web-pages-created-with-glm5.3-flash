@@ -497,6 +497,15 @@
   );
 }
 
+/* At-rest park: with the crossfade stripped (either motion parity state) the
+   back layer must not paint — it stacks after the front in the shared cell
+   and would cover the shipped trio. motion.css's animation overrides this
+   declaration while it runs (animations outrank author declarations), so the
+   fade itself is untouched. */
+.morph-layer.is-back {
+  opacity: 0;
+}
+
 .morph-label {
   margin-top: 1.25rem;
   text-align: center;
