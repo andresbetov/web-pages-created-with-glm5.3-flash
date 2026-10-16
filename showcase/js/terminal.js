@@ -25,7 +25,7 @@ const SESSION_SUMMARY =
 const TERMINAL_LINES = [
   '$ opencode run showcase',
   '→ composing design tokens … ok',
-  '→ animating 9 sections … ok',
+  '→ animating every section … ok',
   '→ auditing contrast … AA passed',
   '→ zero dependencies attached',
   '▍ done in 1 session.',
