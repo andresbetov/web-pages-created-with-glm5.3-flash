@@ -8,9 +8,22 @@ const OUT = '/tmp/opencode/qa-shots';
 const EXE = '/usr/bin/chromium';
 mkdirSync(OUT, { recursive: true });
 
+// Sandboxed networks can stall the Google Fonts round-trip at capture time
+// (blocking-font FOIT: settled layout above the fold, void below). Failed
+// font loads also settle, so wait for `loaded` and capture either way.
+function settleFonts(page, timeoutMs = 6000) {
+  return page.waitForFunction(() => document.fonts.status === 'loaded', { timeout: timeoutMs })
+    .catch(() => console.log('… fonts unsettled on capture (blocked in sandbox); shot taken as-is'));
+}
+
 // Progressive scroll: let IO reveal everything (one-shot), then return to top.
+// scroll-behavior:smooth animates the return leg for seconds — after that
+// flight Chromium's compositor hasn't rasterized the passing area, so a
+// viewport capture lands on a black void mid-glide. Force instant scroll for
+// the loop, then wait until scrollY is actually back at 0.
 async function warmup(page, pivot = 1) {
   await page.evaluate(async () => {
+    document.documentElement.style.scrollBehavior = 'auto';
     const step = window.innerHeight * 0.8;
     const max = document.scrollingElement.scrollHeight;
     for (let y = 0; y <= max; y += step) {
@@ -19,6 +32,8 @@ async function warmup(page, pivot = 1) {
     }
     document.scrollingElement.scrollTo(0, 0);
   });
+  await page.waitForFunction(() => (document.scrollingElement.scrollTop || window.scrollY) === 0, { timeout: 3000 })
+    .catch(() => console.log('… scroll did not settle to top; shot taken as-is'));
   await page.waitForTimeout(500 * pivot);
 }
 
@@ -26,6 +41,7 @@ const browser = await chromium.launch({ executablePath: EXE, args: ['--disable-g
 const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
 const page = await ctx.newPage();
 await page.goto(BASE, { waitUntil: 'networkidle' });
+await settleFonts(page);
 await page.waitForTimeout(1200);
 await warmup(page, 1.5);
 
@@ -72,10 +88,15 @@ for (const s of [
   const c = await browser.newContext({ viewport: { width: s.w, height: s.h } });
   const p = await c.newPage();
   await p.goto(BASE, { waitUntil: 'networkidle' });
+  await settleFonts(p);
   await p.waitForTimeout(900);
   await warmup(p);
   await p.screenshot({ path: `${OUT}/${s.name}.png`, fullPage: false });
-  if (s.name.startsWith('full')) await p.screenshot({ path: `${OUT}/${s.name}.png`, fullPage: true });
+  if (s.name.startsWith('full')) {
+    const vpName = `vp-${s.name.slice(5)}`; // top-of-viewport twin: fixed header at rest
+    await p.screenshot({ path: `${OUT}/${vpName}.png`, fullPage: false });
+    await p.screenshot({ path: `${OUT}/${s.name}.png`, fullPage: true });
+  }
   await overflowCheck(p, s.name);
   await c.close();
 }
@@ -84,6 +105,7 @@ for (const s of [
 const ctx2 = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
 const rp = await ctx2.newPage();
 await rp.goto(BASE, { waitUntil: 'networkidle' });
+await settleFonts(rp);
 await rp.waitForTimeout(800);
 await rp.screenshot({ path: `${OUT}/reduce-full-1440.png`, fullPage: true });
 const st = await rp.evaluate(() => ({
@@ -97,6 +119,7 @@ await ctx2.close();
 const ctx3 = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const tp = await ctx3.newPage();
 await tp.goto(BASE, { waitUntil: 'networkidle' });
+await settleFonts(tp);
 await tp.waitForTimeout(600);
 await tp.click('#motion-toggle');
 await tp.waitForTimeout(400);
