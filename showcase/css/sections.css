@@ -100,12 +100,11 @@
 .marquee {
   display: flex;
   overflow: hidden;
+  gap: 2.5rem; /* inter-track seam matches the intra-track item gap so the
+    Task 3 loop crosses a uniform 2.5rem rhythm; gap lives on the clipper,
+    tracks stay shrink-0 and self-contained. */
   padding-block: clamp(1.5rem, 3vw, 2.25rem);
   border-block: 1px solid var(--line);
-}
-
-.marquee > * {
-  flex-direction: row;
 }
 
 .marquee-track span {
